@@ -1,3 +1,4 @@
+require "sharp_spec/expects"
 require "rspec"
 
 class SharpSpec::Builder
@@ -10,18 +11,8 @@ class SharpSpec::Builder
 
   def build
     test_blocks.each do |block|
-      method = block[:method]
-      expectations = block[:comment].find { |l| l.start_with?("expect:") }
-      expected_values = eval(expectations.sub("expect:", "").strip)
-
-      RSpec.describe method do
-        it "returns one of #{expected_values.inspect}" do
-          10.times do
-            result = Object.send(method.to_sym)
-            expect(expected_values).to include(result)
-          end
-        end
-      end
+      matcher = SharpSpec::Expects.resolve(block[:comment].find { |l| l.start_with?("expect:") }, block[:method])
+      matcher.build
     end
   end
 end
