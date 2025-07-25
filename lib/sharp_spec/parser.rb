@@ -14,10 +14,10 @@ class SharpSpec::Parser
     i = 0
 
     while i < lines.size
-      if lines[i].strip == "# test_comment:begin"
+      if lines[i].strip == "# spec:begin"
         test_comment = []
         i += 1
-        while lines[i] && lines[i].strip != "# test_comment:end"
+        while lines[i] && lines[i].strip != "# spec:end"
           test_comment << lines[i].strip.sub(/^#\s*/, '')
           i += 1
         end

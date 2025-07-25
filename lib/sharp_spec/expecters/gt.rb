@@ -7,17 +7,13 @@ module SharpSpec::Expecters
       ]
     end
 
-    def build
-      expected_value = matched_data[1].to_i
-      method_sym = method_name.to_sym  # capture in local variable
+    def default_description(expected_value) = "greater than #{expected_value}"
+    def expected_value = matched_data[1].to_i
 
-      RSpec.describe method_name do
-        it "returns a value greater than #{expected_value}" do
-          10.times do
-            result = Object.send(method_sym)
-            expect(result).to be > expected_value
-          end
-        end
+    def build
+      expected_value = self.expected_value
+      rspec_wrapper do |method_sym, options|
+        expect(Object.send(method_sym, *options[:args])).to be > expected_value
       end
     end
   end

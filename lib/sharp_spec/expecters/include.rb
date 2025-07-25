@@ -8,17 +8,14 @@ module SharpSpec::Expecters
       ]
     end
 
-    def build
-      expected_values = eval(matched_data[1])
-      method_sym = method_name.to_sym  # capture in local variable
+    def default_description(expected_value) = "included in #{expected_value}"
+    def expected_value = eval(matched_data[1])
 
-      RSpec.describe method_name do
-        it "returns a value included in #{expected_values}" do
-          10.times do
-            result = Object.send(method_sym)
-            expect(expected_values).to include(result)
-          end
-        end
+    def build
+      expected_values = expected_value
+
+      rspec_wrapper do |method_sym, options|
+        expect(expected_values).to include(Object.send(method_sym, *options[:args]))
       end
     end
   end
