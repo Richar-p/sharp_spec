@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "sharp_spec"
+
+file = ARGV[0]
+abort("Usage: sharp_spec path/to/file.rb") unless file
+
+SharpSpec::Runner.run(file)
